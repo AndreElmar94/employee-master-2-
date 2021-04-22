@@ -17,35 +17,38 @@ public class EmployeeServiceImpl implements EmployeeService {
     public EmployeeRepository employeeRepository;
 
     @Override
+    @Transactional
     public void save(Employee employee) {
+        log.info("EmployeeServiceImpl -> employee successfully saved");
         employeeRepository.save(employee);
     }
 
     @Override
     @Transactional(readOnly = true)
     public Employee getById(int id) {
-        log.info("EmployeeServiceImpl -> getById() start");
+        log.info("EmployeeServiceImpl -> found employee by ID: {}", id);
         return employeeRepository.getById(id);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<Employee> findAll() throws Exception {
-        log.info("EmployeeServiceImpl -> findAll() start");
-        return employeeRepository.findAll();
+        List<Employee> employees = employeeRepository.findAll();
+        log.info("EmployeeServiceImpl -> found {} employees", employees.size());
+        return employees;
     }
 
     @Override
     @Transactional
     public void update(Employee employee) throws Exception {
-        log.info("EmployeeServiceImpl -> update() start");
+        log.info("EmployeeServiceImpl -> updated Employee");
         employeeRepository.update(employee);
     }
 
     @Override
     @Transactional
     public void delete(int id) throws Exception {
-        log.info("EmployeeServiceImpl -> delete() start");
+        log.info("EmployeeServiceImpl -> deleted employee by ID: {}", id);
         employeeRepository.delete(id);
     }
 }
