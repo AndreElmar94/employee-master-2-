@@ -4,6 +4,7 @@ import com.mastery.java.task.entity.Employee;
 import com.mastery.java.task.exception.EmployeeNotFoundException;
 import com.mastery.java.task.mapper.EmployeeMapperImpl;
 import com.mastery.java.task.util.ConnectionUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
@@ -13,6 +14,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Repository
 public class EmployeeRepositoryImpl implements EmployeeRepository {
 
@@ -52,27 +54,26 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
             pstmt.setDate(5, employee.getDateOfBirth());
             pstmt.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Connection not install with data base!!!");
         }
     }
 
     @Override
     public Employee getById(int id) {
+        Employee foundEmployee = null;
         try (Connection con = ConnectionUtil.getConnection();
              PreparedStatement pstmt = con.prepareStatement(SELECT_EMPLOYEE_BY_ID_QUERY)) {
 
             pstmt.setInt(1, id);
             try (ResultSet rs = pstmt.executeQuery()) {
-                Employee foundEmployee = null;
                 while (rs.next()) {
                     foundEmployee = employeeMapper.mapToEntity(rs);
                 }
-                return foundEmployee;
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
+        return foundEmployee;
     }
 
     @Override
@@ -85,47 +86,47 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
                     Employee employee = employeeMapper.mapToEntity(rs);
                     employees.add(employee);
                 }
-                return employees;
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException ex) {
+            System.out.println("Connection not install with data base!!!");
         }
-        return null;
+        return employees;
     }
 
     @Override
-    public void update(Employee employee) throws Exception {
+    public void update(Employee employee) {
 
         if (employee.getEmployeeId() == 0) {
             throw new EmployeeNotFoundException("У сотрудника нет ID!!!");
         }
-        Connection con = ConnectionUtil.getConnection();
-        PreparedStatement pstmt = con.prepareStatement(UPDATE_EMPLOYEE_QUERY);
-        pstmt.setString(1, employee.getFirstName());
-        pstmt.setString(2, employee.getLastName());
-        pstmt.setInt(3, employee.getDepartmentId());
-        pstmt.setString(4, employee.getJobTitle());
-        pstmt.setDate(5, employee.getDateOfBirth());
+        try (Connection con = ConnectionUtil.getConnection();
+             PreparedStatement pstmt = con.prepareStatement(UPDATE_EMPLOYEE_QUERY)) {
 
-        pstmt.setInt(6, employee.getEmployeeId());
+            pstmt.setString(1, employee.getFirstName());
+            pstmt.setString(2, employee.getLastName());
+            pstmt.setInt(3, employee.getDepartmentId());
+            pstmt.setString(4, employee.getJobTitle());
+            pstmt.setDate(5, employee.getDateOfBirth());
 
-        int updatedRows = pstmt.executeUpdate();
-        System.out.println("Обновлено: " + updatedRows + " строк!");
+            pstmt.setInt(6, employee.getEmployeeId());
 
-        pstmt.close();
-        con.close();
+            int updatedRows = pstmt.executeUpdate();
+            log.info("Обновлено: " + updatedRows + " строк!");
+        } catch (SQLException ex) {
+            System.out.println("Connection not install with data base!!!");
+        }
     }
 
     @Override
-    public void delete(int id) throws Exception {
-        Connection con = ConnectionUtil.getConnection();
-        PreparedStatement pstmt = con.prepareStatement(DELETE_EMPLOYEE_QUERY);
-        pstmt.setInt(1, id);
+    public void delete(int id) {
+        try (Connection con = ConnectionUtil.getConnection();
+             PreparedStatement pstmt = con.prepareStatement(DELETE_EMPLOYEE_QUERY)) {
+            pstmt.setInt(1, id);
 
-        int rows = pstmt.executeUpdate();
-        System.out.println("Удалено " + rows + " строк!");
-
-        pstmt.close();
-        con.close();
+            int rows = pstmt.executeUpdate();
+            log.info("Удалено " + rows + " строк!");
+        } catch (SQLException e) {
+            System.out.println("Connection not install with data base!!!");
+        }
     }
 }
