@@ -7,19 +7,21 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.SQLException;
+
 @Controller
 @RequestMapping("/")
 public class EmployeeController {
 
-    @Autowired
-    public EmployeeService employeeService;
+    private final EmployeeService employeeService;
 
+    @Autowired
     public EmployeeController(EmployeeService employeeService) {
         this.employeeService = employeeService;
     }
 
     @GetMapping("/employees")
-    public String getAllEmployees(Model model) throws Exception {
+    public String getAllEmployees(Model model) throws SQLException {
         model.addAttribute("employees", employeeService.findAll());
         return "employees";
     }
@@ -36,7 +38,7 @@ public class EmployeeController {
     }
 
     @PostMapping("/updateEmployee")
-    public String updateEmployee(@ModelAttribute("employee") Employee employee) throws Exception {
+    public String updateEmployee(@ModelAttribute("employee") Employee employee) throws SQLException {
         employeeService.update(employee);
         return "redirect:/employees";
     }
@@ -48,7 +50,7 @@ public class EmployeeController {
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteEmployee(@PathVariable("id") int id) throws Exception {
+    public String deleteEmployee(@PathVariable("id") int id) throws SQLException {
         employeeService.delete(id);
         return "redirect:/employees";
     }
