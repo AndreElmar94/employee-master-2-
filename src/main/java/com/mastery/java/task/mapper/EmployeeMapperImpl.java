@@ -18,8 +18,7 @@ public class EmployeeMapperImpl implements EmployeeMapper {
         String jobTitle = rs.getString("job_title");
         Date dateOfBirth = rs.getDate("date_of_birth");
 
-        Employee employee = new Employee(employeeId, firstName,
+        return new Employee(employeeId, firstName,
                 lastName, departmentId, jobTitle, dateOfBirth);
-        return employee;
     }
 }
