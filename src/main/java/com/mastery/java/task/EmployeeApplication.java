@@ -6,10 +6,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class EmployeeApplication {
 
-    public static void main(String[] args) throws ClassNotFoundException {
+    public static void main(String[] args) {
 
         SpringApplication.run(EmployeeApplication.class, args);
 
-        Class.forName("org.postgresql.Driver");
     }
 }
