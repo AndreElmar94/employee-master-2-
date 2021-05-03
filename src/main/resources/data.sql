@@ -1,5 +1,3 @@
--- drop database if exists employeedb2;
-
 drop table if exists employee;
 
 create table employee
