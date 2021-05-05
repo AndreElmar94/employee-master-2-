@@ -7,13 +7,13 @@ import java.util.List;
 
 public interface EmployeeService {
 
-    void create(String firstName, String lastName, int departmentId, String jobTitle, Date dateOfBirth);
+    Integer create(String firstName, String lastName, int departmentId, String jobTitle, Date dateOfBirth);
 
     Employee getById(int id);
 
     List<Employee> findAll();
 
-    void update(String firstName, String lastName, int departmentId, String jobTitle, int employeeId, Date dateOfBirth);
+    int update(String firstName, String lastName, int departmentId, String jobTitle, int employeeId, Date dateOfBirth);
 
     void delete(int id);
 }

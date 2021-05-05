@@ -1,11 +1,8 @@
 package com.mastery.java.task.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import java.sql.Date;
+import java.sql.Date; //java.sql.Date -> пришлось использовать именно этот пакет, тк любой другой PostgreSQL не принимает.
 
 @Data
 @Builder
@@ -19,5 +16,4 @@ public class Employee {
     private int departmentId;
     private String jobTitle;
     private Date dateOfBirth;
-
 }

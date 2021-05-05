@@ -21,18 +21,20 @@ public class EmployeeServiceImpl implements EmployeeService {
         this.employeeDao = employeeDao;
     }
 
+
     @Override
-    public void create(String firstName, String lastName, int departmentId, String jobTitle, Date dateOfBirth) {
-        log.info("EmployeeServiceImpl -> employee successfully saved");
-        employeeDao.create(firstName, lastName, departmentId, jobTitle, dateOfBirth);
+    public Integer create(String firstName, String lastName, int departmentId, String jobTitle, Date dateOfBirth) {
+        log.info("EmployeeServiceImpl -> will save employee");
+        return employeeDao.create(firstName, lastName, departmentId, jobTitle, dateOfBirth).orElseThrow(() -> new EmployeeNotFoundException(String.format("Employee was not created")));
     }
 
 
     @Override
     public Employee getById(int id) {
-        log.info("EmployeeServiceImpl -> found employee by ID: {}", id);
+        log.info("EmployeeServiceImpl -> get employee by ID: {}", id);
         return employeeDao.getById(id).orElseThrow(() -> new EmployeeNotFoundException(String.format("Employee was not found by id: %s", id)));
     }
+
 
     @Override
     public List<Employee> findAll() {
@@ -42,9 +44,10 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public void update(String firstName, String lastName, int departmentId, String jobTitle, int employeeId, Date dateOfBirth) {
-        log.info("EmployeeServiceImpl -> updated Employee");
+    public int update(String firstName, String lastName, int departmentId, String jobTitle, int employeeId, Date dateOfBirth) {
+        log.info("EmployeeServiceImpl -> will update employee");
         employeeDao.update(firstName, lastName, departmentId, jobTitle, employeeId, dateOfBirth);
+        return employeeId;
     }
 
     @Override

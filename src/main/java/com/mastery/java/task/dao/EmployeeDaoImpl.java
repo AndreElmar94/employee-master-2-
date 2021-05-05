@@ -9,7 +9,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.sql.Date; // java.sql.Date -> пришлось использовать именно этот пакет, тк любой другой PostgreSQL не принимает.
+import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,23 +18,23 @@ import java.util.Optional;
 @NoArgsConstructor
 public class EmployeeDaoImpl implements EmployeeDao {
 
+    @Autowired
     private JdbcTemplate jdbcTemplate;
-    private DataSource dataSource;
 
     @Autowired
     public EmployeeDaoImpl(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
+
     @Override
     public void setDataSource(DataSource dataSource) {
-        this.dataSource = dataSource;
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
     private static final String INSERT_EMPLOYEE_QUERY =
             "INSERT INTO employee (first_name, last_name, department_id, job_title, date_of_birth) " +
-                    "VALUES (?, ?, ?, ?,?);";
+                    "VALUES (?, ?, ?, ?, ?);";
 
     private static final String SELECT_EMPLOYEE_BY_ID_QUERY =
             "SELECT * FROM employee " +
@@ -54,9 +54,13 @@ public class EmployeeDaoImpl implements EmployeeDao {
             "DELETE FROM employee " +
                     "WHERE employee_id = ?;";
 
+    private static final String SELECT_LAST_INSERT_ID =
+            "SELECT CURRVAL(pg_get_serial_sequence('employee','employee_id'));";
+
     @Override
-    public void create(String firstName, String lastName, int departmentId, String jobTitle, Date dateOfBirth) {
+    public Optional<Integer> create(String firstName, String lastName, int departmentId, String jobTitle, Date dateOfBirth) {
         jdbcTemplate.update(INSERT_EMPLOYEE_QUERY, firstName, lastName, departmentId, jobTitle, dateOfBirth);
+        return Optional.ofNullable(jdbcTemplate.queryForObject(SELECT_LAST_INSERT_ID, Integer.class));
     }
 
     @Override
@@ -70,8 +74,9 @@ public class EmployeeDaoImpl implements EmployeeDao {
     }
 
     @Override
-    public void update(String firstName, String lastName, int departmentId, String jobTitle, int employeeId, Date dateOfBirth) {
+    public int update(String firstName, String lastName, int departmentId, String jobTitle, int employeeId, Date dateOfBirth) {
         jdbcTemplate.update(UPDATE_EMPLOYEE_QUERY, firstName, lastName, departmentId, jobTitle, dateOfBirth, employeeId);
+        return employeeId;
     }
 
     @Override
