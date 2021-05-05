@@ -10,14 +10,14 @@
 <table border="1">
     <tr>
         <th>Id</th>
-        <th>Name</th>
+        <th>FirstName</th>
         <th>LastName</th>
         <th>DepartmentId</th>
         <th>JobTitle</th>
         <th>DateOfBirth</th>
     </tr>
     <tr th:each="employee: ${employees}">
-        <td th:text="${employee.employeeId}"></td>
+        <th th:text="${employee.employeeId}"></th>
         <th th:text="${employee.firstName}"></th>
         <th th:text="${employee.lastName}"></th>
         <th th:text="${employee.departmentId}"></th>
