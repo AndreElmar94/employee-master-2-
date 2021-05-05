@@ -6,7 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Date; // java.sql.Date -> пришлось использовать именно этот пакет, тк любой другой PostgreSQL не принимает.
+import java.sql.Date;
 
 @Controller
 @RequestMapping("/")
@@ -53,5 +53,4 @@ public class EmployeeController {
         employeeService.delete(id);
         return "redirect:/employees";
     }
-
 }
