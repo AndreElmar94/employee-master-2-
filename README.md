@@ -10,10 +10,12 @@
 
 
 ###### the web application was written using:
-#### - JDBC
+#### - Java8
+#### - Spring JDBC
 #### - Maven
-#### - Framework Spring Boot
+#### - Spring Boot
 #### - PostgreSQL
-#### - Project lombok
-#### - library Thymeleaf
+#### - lombok
+#### - Thymeleaf
 #### - HTML
+#### - JUnit
