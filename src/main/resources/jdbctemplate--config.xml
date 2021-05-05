@@ -11,7 +11,6 @@
         <property name="username" value="rita"/>
         <property name="password" value="1234"/>
     </bean>
-
     <bean id="EmployeeDao"
           class="com.mastery.java.task.dao.EmployeeDaoImpl">
         <property name="dataSource"  ref="dataSource" />
